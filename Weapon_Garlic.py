@@ -1,16 +1,15 @@
 from Weapon import Weapon
 from Hitbox_Manager import Hitbox_Manager
-from Config import Config
 import random
+
 
 class Weapon_Garlic(Weapon):
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, id, data):
+        super().__init__(id, data)
 
         self.offset = 0
         self.proj_arrey = []
-
 
     def act(self):
         self.time += 1
@@ -38,28 +37,6 @@ class Weapon_Garlic(Weapon):
     def aming(self, offset):
         player = Hitbox_Manager.get_player(0)
         ppos = player.get_pos()
-        target = (-100000,-100000)
+        target = (-100000, -100000)
         proj = self.create_proj(target, ppos)
         self.proj_arrey.append(proj)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

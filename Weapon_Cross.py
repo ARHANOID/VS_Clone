@@ -2,15 +2,16 @@ from Weapon import Weapon
 from Hitbox_Manager import Hitbox_Manager
 import random
 
+
 class Weapon_Cross(Weapon):
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, id, data):
+        super().__init__(id, data)
 
         self.offset = 0
         self.proj_arrey = []
         self.secondary_proj_arrey = []
-        self.start_pos = (0,0)
+        self.start_pos = (0, 0)
 
     def act(self):
         self.time += 1
@@ -45,12 +46,11 @@ class Weapon_Cross(Weapon):
                     if speed < self.speed - 1:
                         self.secondary_proj_arrey.remove(proj)
 
-
     def base_mechanic(self):
         r = random.randint(20, 50)
-        self.aming(self.offset +  r)
+        self.aming(self.offset + r)
 
-    def straight_line(self, pos, lenth, direction = -1):
+    def straight_line(self, pos, lenth, direction=-1):
         player = Hitbox_Manager.get_player(0)
         ppos = player.get_pos()
         dx = (ppos[0] - pos[0]) * lenth
@@ -59,37 +59,15 @@ class Weapon_Cross(Weapon):
         x = ppos[0] + dx * direction
         y = ppos[1] + dy * direction
 
-        return (x,y)
+        return (x, y)
 
     def aming(self, offset):
 
         player = Hitbox_Manager.get_player(0)
         ppos = player.get_pos()
         pos = Hitbox_Manager.get_nearest_mob(ppos)
-        target = self.straight_line( pos, 4)
+        target = self.straight_line(pos, 4)
 
-        ppos = (ppos[0] + int(offset/1), ppos[1] + int(offset/1))
+        ppos = (ppos[0] + int(offset / 1), ppos[1] + int(offset / 1))
         proj = self.create_proj(target, ppos)
         self.proj_arrey.append(proj)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

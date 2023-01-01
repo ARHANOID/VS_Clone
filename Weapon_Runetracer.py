@@ -1,16 +1,16 @@
 from Weapon import Weapon
 from Hitbox_Manager import Hitbox_Manager
-from Config import Config
+import Config
 import random
+
 
 class Weapon_Runetracer(Weapon):
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, id, data):
+        super().__init__(id, data)
 
         self.offset = 0
         self.proj_arrey = []
-
 
     def act(self):
         self.time += 1
@@ -30,9 +30,7 @@ class Weapon_Runetracer(Weapon):
                     target = self.spawn_mob()
                     proj.set_destination(target)
             else:
-                 self.proj_arrey.remove(proj)
-
-
+                self.proj_arrey.remove(proj)
 
     def colide_with_border(self, x_y):
         x, y = x_y
@@ -45,7 +43,6 @@ class Weapon_Runetracer(Weapon):
         if y >= Config.W_h:
             return True
         return False
-
 
     def spawn_mob(self):
         offset = 500
@@ -72,29 +69,6 @@ class Weapon_Runetracer(Weapon):
 
         target = self.spawn_mob()
 
-
         # x , y = x + int(offset/1), y + int(offset/1)
         proj = self.create_proj(target, ppos)
         self.proj_arrey.append(proj)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

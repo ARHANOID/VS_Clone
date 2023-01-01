@@ -1,17 +1,17 @@
 from Weapon import Weapon
 from Hitbox_Manager import Hitbox_Manager
-from Config import Config
+import Config
 import random
+
 
 class Weapon_Axe(Weapon):
 
-    def __init__(self, data):
-        super().__init__(data)
+    def __init__(self, id, data):
+        super().__init__(id, data)
 
         self.offset = 0
         self.proj_arrey = []
         self.secondary_proj_arrey = []
-
 
     def act(self):
         self.time += 1
@@ -32,7 +32,7 @@ class Weapon_Axe(Weapon):
                     if speed < 1:
                         pos = proj.get_pos()
                         proj.set_speed(self.speed)
-                        proj.set_destination((pos[0],Config.W_h))
+                        proj.set_destination((pos[0], Config.W_h))
                         self.secondary_proj_arrey.append(proj)
                         self.proj_arrey.remove(proj)
                 else:
@@ -42,15 +42,14 @@ class Weapon_Axe(Weapon):
                 if Hitbox_Manager.do_proj_exist(proj):
                     speed = proj.get_speed() + 1
                     proj.set_speed(speed)
-                    if speed < self.speed - 1 :
+                    if speed < self.speed - 1:
                         self.secondary_proj_arrey.remove(proj)
                 else:
                     self.secondary_proj_arrey.remove(proj)
 
-
     def base_mechanic(self):
         r = random.randint(20, 50)
-        self.aming(self.offset +  r)
+        self.aming(self.offset + r)
 
     def aming(self, offset):
         player = Hitbox_Manager.get_player(0)
@@ -59,28 +58,6 @@ class Weapon_Axe(Weapon):
         r = random.randint(-500, 500)
         x, y = ppos[0] + r, ppos[1] - 300
 
-        x , y = x + int(offset/1), y + int(offset/1)
-        proj = self.create_proj((x,y), ppos)
+        x, y = x + int(offset / 1), y + int(offset / 1)
+        proj = self.create_proj((x, y), ppos)
         self.proj_arrey.append(proj)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

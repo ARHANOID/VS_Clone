@@ -1,7 +1,4 @@
-from Config import Config
-import random
-import pygame
-
+import ARX_math
 
 s_projectiles_rect = []
 s_mob_rect = []
@@ -10,6 +7,7 @@ s_player_rect = []
 s_projectiles_id = []
 s_mob_id = []
 s_player_id = []
+s_temp_effects = []
 
 s_proj_memory = []
 s_mob_memory = []
@@ -19,12 +17,14 @@ s_id_data = [4]
 
 class Hitbox_Manager():
 
-
-
     @staticmethod
     def add_id():
         s_id_data[0] += 1
         return s_id_data[0]
+
+    @staticmethod
+    def add_temp_effect(eff):
+        s_temp_effects.append(eff)
 
     @staticmethod
     def add_proj(proj):
@@ -40,6 +40,10 @@ class Hitbox_Manager():
     def add_player(player):
         s_player_id.append(player)
         s_player_rect.append(player.get_rect())
+
+    @staticmethod
+    def remove_temp_effect(id):
+        s_temp_effects.remove(id)
 
     @staticmethod
     def remove_proj(id):
@@ -61,7 +65,7 @@ class Hitbox_Manager():
     def remove_mob_finaly(id):
         for i in range(len(s_mob_id)):
             if s_mob_id[i].get_id() == id:
-                s_mob_id.pop(i)
+                mob = s_mob_id.pop(i)
                 s_mob_rect.pop(i)
                 return
 
@@ -76,21 +80,15 @@ class Hitbox_Manager():
     @staticmethod
     def get_nearest_mob(x_y):
         x, y = x_y
-        x2, y2 = 0,0
+        x2, y2 = 0, 0
         minl = 9999999
         for elem in s_mob_id:
             x1, y1 = elem.get_pos()
-            l = Hitbox_Manager.lenght(x, y, x1, y1)
+            l = ARX_math.lenght(x, y, x1, y1)
             if minl > l:
                 minl = l
                 x2, y2 = x1, y1
         return (x2, y2)
-
-    @staticmethod
-    def lenght(x1, y1, x2, y2):
-        r1 = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
-        return r1
-
 
     @staticmethod
     def get_player(id):
@@ -108,25 +106,6 @@ class Hitbox_Manager():
 
         return False
 
-
-    @staticmethod
-    def action_proj():
-        Hitbox_Manager.mem_clean()
-        list_of_mobs = list(s_mob_rect)
-        # result = False
-        for proj in s_projectiles_id:
-            proj.act()
-            index = proj.get_rect().collidelist(list_of_mobs)
-            if index > -1:
-                proj.collide(s_mob_id[index])
-
-
-                # print(" if index > -1:", index, elem.get_id(), len(s_mob_id))
-                # if proj.collide(s_mob_id[index]):
-                    # result = True
-        # return result
-
-
     @staticmethod
     def mem_clean():
         for elem in s_proj_memory:
@@ -136,6 +115,16 @@ class Hitbox_Manager():
         for elem in s_mob_memory:
             Hitbox_Manager.remove_mob_finaly(elem)
         s_mob_memory.clear()
+
+    @staticmethod
+    def action_proj():
+        Hitbox_Manager.mem_clean()
+        list_of_mobs = list(s_mob_rect)
+        for proj in s_projectiles_id:
+            proj.act()
+            index = proj.get_rect().collidelist(list_of_mobs)
+            if index > -1:
+                proj.collide(s_mob_id[index])
 
     @staticmethod
     def action_mob():
@@ -149,6 +138,9 @@ class Hitbox_Manager():
             elem.act()
             index = elem.get_rect().collidelist(list_of_mobs)
             if index > -1:
-                # print(" if index > -1:", index, elem.get_id(), s_mob_id[index].get_id())
                 elem.collide(s_mob_id[index])
 
+    @staticmethod
+    def action_temp_effects():
+        for elem in s_temp_effects:
+            elem.act()
