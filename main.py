@@ -9,6 +9,7 @@ from Menu import Menu
 import Config
 from Hitbox_Manager import Hitbox_Manager
 from Exel_export import Exel_export
+import time
 
 step = Config.W_h // 6
 zero = '0'
@@ -67,6 +68,9 @@ def main(level, score):
 
     Game_time = 0
 
+    amo_in_air = []
+    monster_on_board = []
+
     path_mob = r'exels\\Mobs.xlsx'
     path_weapons = r'exels\\Weapons.xlsx'
     mob_data = Exel_export.mobs_export(path_mob)
@@ -84,7 +88,7 @@ def main(level, score):
 
     Painter.initialize()
     pygame.mixer.init()
-    pygame.mixer.set_num_channels(10)
+    pygame.mixer.set_num_channels(20)
     player_img = Config.s_address["Player_Witch"]
     board_img = pygame.image.load(Config.s_address["Field"])
 
@@ -102,10 +106,13 @@ def main(level, score):
     while True:
         Painter.game_start(board_img)
         tasks = []
+        # Painter.draw_text("lvl: " + str(player.get_lvl()), int(Config.W_w - 200), int(2 * Config.W_h / 80), 30)
+        # Painter.draw_text("hp: " + str(player.get_hp()), int(Config.W_w - 100), int(2 * Config.W_h / 80), 30)
 
         mouseClicked = False
 
         if Game_time % Mob_spawn_time_interval == 0:
+            # Mob_spawn_time_interval += 1
             spawn_intensity += 1
             for i in range(int(spawn_intensity / 10)):
                 n = (mob_id + 60) // dif_number
@@ -115,7 +122,10 @@ def main(level, score):
                 r = random.randint(0, n)
                 name = mobs_names[r]
                 mob = mob_data[name]
+                # mob_name, size, speed, hp, dmg, mob_img, mob_revert_img = mob
+
                 mob_pos = find_mob_spawn_loc()
+                # mob_type = find_mob_spawn_type(mob_data, mobs_names, mob_id)
                 mob = Monster(mob_id, mob_pos, mob)
                 mob_id += 1
 
@@ -130,10 +140,14 @@ def main(level, score):
         if player.get_lvlup_ready() > 0:
             weapon_name = Menu.lvl_up_open(new_weapons, weapon_data)
             print("weapon_name", weapon_name)
-            if weapon_name is not None:
+            if weapon_name is "Loaded":
+                player = Hitbox_Manager.get_player(0)
+                player_actions = (player.move_left, player.move_right, player.move_up, player.move_down)
+            elif weapon_name is not None:
                 player.lvlup(weapon_data[weapon_name])
-                for i in range(len(key_presed)):
-                    key_presed[i] = False
+
+            for i in range(len(key_presed)):
+                key_presed[i] = False
 
         for i in range(len(key_presed)):
             if key_presed[i]:
@@ -152,9 +166,14 @@ def main(level, score):
             elif event.type == KEYUP and event.key == K_F10:
                 weapon_name = Menu.lvl_up_open(new_weapons, weapon_data)
                 print("weapon_name", weapon_name)
-                if weapon_name is not None:
+                if weapon_name is "Loaded":
+                    player = Hitbox_Manager.get_player(0)
+                    player_actions = (player.move_left, player.move_right, player.move_up, player.move_down)
+                elif weapon_name is not None:
                     player.lvlup(weapon_data[weapon_name])
-                    # new_weapons.remove(weapon_name)
+
+                for i in range(len(key_presed)):
+                    key_presed[i] = False
 
             for i in range(len(key_presed)):
                 if event.type == KEYDOWN and (event.key == arrows_actions[i] or event.key == wsad_actions[i]):

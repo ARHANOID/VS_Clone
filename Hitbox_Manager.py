@@ -120,11 +120,17 @@ class Hitbox_Manager():
     def action_proj():
         Hitbox_Manager.mem_clean()
         list_of_mobs = list(s_mob_rect)
+        # result = False
         for proj in s_projectiles_id:
             proj.act()
             index = proj.get_rect().collidelist(list_of_mobs)
             if index > -1:
                 proj.collide(s_mob_id[index])
+
+                # print(" if index > -1:", index, elem.get_id(), len(s_mob_id))
+                # if proj.collide(s_mob_id[index]):
+                # result = True
+        # return result
 
     @staticmethod
     def action_mob():
@@ -138,9 +144,48 @@ class Hitbox_Manager():
             elem.act()
             index = elem.get_rect().collidelist(list_of_mobs)
             if index > -1:
+                # print(" if index > -1:", index, elem.get_id(), s_mob_id[index].get_id())
                 elem.collide(s_mob_id[index])
 
     @staticmethod
     def action_temp_effects():
         for elem in s_temp_effects:
             elem.act()
+
+    @staticmethod
+    def get_all_data():
+        for elem in s_projectiles_id:
+            elem.del_img()
+        for elem in s_mob_id:
+            elem.del_img()
+        for elem in s_player_id:
+            elem.del_img()
+
+        return s_projectiles_id, s_mob_id, s_player_id, s_id_data
+
+    @staticmethod
+    def load_all_data(proj, mob, player, id_data):
+        s_projectiles_id.clear()
+        s_mob_id.clear()
+        s_player_id.clear()
+        s_id_data.clear()
+        s_projectiles_rect.clear()
+        s_temp_effects.clear()
+        s_mob_rect.clear()
+        s_player_rect.clear()
+        s_proj_memory.clear()
+        s_mob_memory.clear()
+        for elem in proj:
+            elem.set_img()
+            s_projectiles_id.append(elem)
+            s_projectiles_rect.append(elem.get_rect())
+        for elem in mob:
+            elem.set_img()
+            s_mob_id.append(elem)
+            s_mob_rect.append(elem.get_rect())
+        for elem in player:
+            elem.set_img()
+            s_player_id.append(elem)
+            s_player_rect.append(elem.get_rect())
+        for elem in id_data:
+            s_id_data.append(elem)

@@ -2,6 +2,7 @@ from Hitbox_Manager import Hitbox_Manager
 from Projectile import Projectile
 from Paiter import Painter
 import pygame
+import Config
 
 
 class Weapon(object):
@@ -35,20 +36,25 @@ class Weapon(object):
         self.projectils_inc = 0
         self.pierce_inc = 0
         self.lvl = 0
-
-        image = pygame.image.load(data[14])
-        size = image.get_size()
-        self.icon = pygame.transform.scale(image, (int(size[0] / 2), int(size[1] / 2)))
-        if type(self.temp) is float:
-            self.temp = None
-        else:
-            self.temp = pygame.image.load(self.temp)
+        self.icon = None
 
         self.upgrades = {"proj": self.upgrade_proj,
                          "dmg": self.upgrade_dmg,
                          "pierce": self.upgrade_pierce,
                          "speed": self.upgrade_speed,
                          "duration": self.upgrade_duration}
+
+        if type(self.temp) is float:
+            self.temp = None
+        self.set_img()
+
+    def set_img(self):
+        image = pygame.image.load(self.data[14])
+        size = image.get_size()
+        self.icon = pygame.transform.scale(image, (int(size[0] / 2), int(size[1] / 2)))
+
+    def del_img(self):
+        self.icon = None
 
     def start(self):
         offset = (70 * self.id, 0)

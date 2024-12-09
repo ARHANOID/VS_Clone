@@ -72,3 +72,8 @@ class Weapon_Runetracer(Weapon):
         # x , y = x + int(offset/1), y + int(offset/1)
         proj = self.create_proj(target, ppos)
         self.proj_arrey.append(proj)
+
+    def del_img(self):
+        super().del_img()
+        for proj in self.proj_arrey:
+            proj.del_img()

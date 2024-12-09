@@ -25,7 +25,9 @@ class Weapon_Magic_Wand(Weapon):
         x = ppos[0] - dx
         y = ppos[1] - dy
 
+        # ppos = (ppos[0] + int(offset/1), ppos[1] + int(offset/1))
         x, y = x + int(offset / 1), y + int(offset / 1)
         ppos = (ppos[0] + int(offset / 1), ppos[1] + int(offset / 1))
 
         proj = self.create_proj((x, y), ppos)
+

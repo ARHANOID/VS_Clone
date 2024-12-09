@@ -23,6 +23,7 @@ s_Weapons = {"Whip": Weapon_Whip,
              "Fire Wand": None,
              "Santa Water": None}
 
+# s_direct = ((1,0,4),(0,1,4),(1,2,5),(2,1,5),(2,3,6),(3,2,6),(3,4,7),(4,3,7))
 s_direct = ((0, 1, 4), (1, 2, 5), (2, 3, 6), (3, 0, 7))
 
 xp_boost = 2
@@ -30,6 +31,7 @@ xp_boost = 2
 
 class Player(Entity):
     def __init__(self, id, pos, size, lvl, speed, img=None):
+        self.weapons = {}
         super().__init__(id, pos, size, speed, img)
         self.upgrade_counter = 0
         self.hp = 100
@@ -39,7 +41,7 @@ class Player(Entity):
         self.lvlup_ready = lvl
 
         self.lvl = 0
-        self.weapons = {}
+
         self.xp_for_next_lvl = (self.xp + self.lvl * 100 + 100) / xp_boost
 
         Hitbox_Manager.add_player(self)
@@ -57,12 +59,14 @@ class Player(Entity):
         self.xp += xp
         if self.xp >= self.xp_for_next_lvl:
             self.lvlup_ready += 1
+            # self.lvlup()
 
     def lvlup(self, w):
         self.add_weapon(w)
         self.xp_for_next_lvl = self.xp + self.lvl * 100 + 50
         self.lvl += 1
         self.lvlup_ready += -1
+        # pygame.event.post("lvlup")
         print("lvlup", self.lvl)
 
     def add_weapon(self, w):
@@ -72,6 +76,7 @@ class Player(Entity):
         if weapon_class is None:
             print("Player add_weapon weapon_class == None")
             return
+        # weapon = weapon_class(w)
         if w[0] in self.weapons:
             self.weapons[w[0]].lvlup()
             return
@@ -86,6 +91,19 @@ class Player(Entity):
 
     def get_hp(self):
         return self.hp
+
+    def set_img(self):
+        if type(self.text_img) is str:
+            self.img = pygame.image.load(self.text_img)
+        else:
+            self.img = self.text_img
+        for key, elem in self.weapons.items():
+            elem.set_img()
+
+    def del_img(self):
+        self.img = None
+        for key, elem in self.weapons.items():
+            elem.del_img()
 
     def direction_change(self, d):
         for elem in s_direct:

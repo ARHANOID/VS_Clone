@@ -8,15 +8,15 @@ class Entity(object):
         self.id = idintification
         self.pos = [pos[0], pos[1]]
         self.speed = speed
-        if type(img) is str:
-            self.img = pygame.image.load(img)
-        else:
-            self.img = img
+        self.text_img = img
+        self.img = None
         self.size = size
         self.rect = pygame.Rect(self.get_pos(), self.size)
 
         self.time = 0
         self.rotation = False
+
+        self.set_img()
 
     def get_pos(self):
         return list(self.pos)
@@ -33,6 +33,15 @@ class Entity(object):
 
     def set_pos(self, pos):
         self.pos = pos
+
+    def set_img(self):
+        if type(self.text_img) is str:
+            self.img = pygame.image.load(self.text_img)
+        else:
+            self.img = self.text_img
+
+    def del_img(self):
+        self.img = None
 
     def rotor(self, b):
         if b is self.rotation:
@@ -87,7 +96,9 @@ class Entity(object):
         if checker == 2:
             return self.explosion()
 
+        # self.rect.move_ip(-ddx, -ddy)
         self.rect.update(self.get_center(), self.size)
+        # self.rect.center = self.pos
         self.move()
 
     def explosion(self):

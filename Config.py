@@ -19,15 +19,14 @@ Direction = ((right, up, left, douw), (up, left, douw, right), (left, douw, righ
 
 s_data = {"Player_units_limit": 32,
           "starting_heat": 25,
-          "FPS": 60}
+          "FPS": 6000}
 
 s_address = {"Field": "Images\\UI\\Field.png",
              "Player_Witch": "Images\\Players\\Witch.png",
              "Lvlup_Button": "Images\\UI\\Lvlup_Button.png",
              "Start_Screen": "Images\\UI\\Start_Screen.png",
              "Lvlup_Plate": "Images\\UI\\Lvlup_Plate.png",
-             "SMenu_Button": "Images\\UI\\SMenu_Button.png",
-             "FPS": 60
+             "SMenu_Button": "Images\\UI\\SMenu_Button.png"
              }
 
 

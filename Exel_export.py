@@ -6,17 +6,22 @@ class Exel_export():
     @staticmethod
     def mobs_export(path):
         ex_data = pd.read_excel(path)
-
+        # col = pd.DataFrame(ex_data, columns=["name", "size", "speed", "hp", "dmg", "img", "img_revert"])
         col = ("name", "size", "speed", "hp", "dmg", "img", "img_revert")
         df = pd.DataFrame(ex_data, columns=col)
+        # print(df)
         full_data = {}
         raw_data = {}
         for i in range(8):
+            # print(i)
             raw = df.iloc[i]
             mb_list = list(raw.tail(10))
             for i in range(len(col)):
                 raw_data[col[i]] = mb_list[i]
             full_data[mb_list[0]] = mb_list
+
+            # for key, value in raw_data.items():
+            #     print(key, value)
         return full_data
 
     @staticmethod
@@ -38,4 +43,7 @@ class Exel_export():
             for i in range(len(col)):
                 raw_data[col[i]] = mb_list[i]
             full_data[mb_list[0]] = mb_list
+
+            # for key, value in raw_data.items():
+            #     print(key, value)
         return full_data
